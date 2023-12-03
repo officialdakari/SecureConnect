@@ -11,8 +11,8 @@ const { packServiceData } = require('./serializer');
 const config = YAML.parse(fs.readFileSync('config.yml', 'utf-8'));
 
 const server = https.createServer({
-    key: fs.readFileSync('key.pem'),
-    cert: fs.readFileSync('cert.pem'),
+    key: fs.readFileSync(config.key_path),
+    cert: fs.readFileSync(config.cert_path),
     passphrase: config.passphrase
 }, (req, res) => {
     console.log(`${req.method} ${req.url}`);

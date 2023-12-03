@@ -1,0 +1,9 @@
+port: 5011
+path: '/SecureConnect/juuFaifood1Kae2ietheoZie0ieSi8qu'
+aesKey: 'key for AES traffic encryption (not for websocket, but for proxied traffic)'
+users:
+  - username: SecureConnect
+    password: SecureConnect
+#passphrase: 'passphrase for HTTPS certificate'
+key_path: 'key.pem'
+cert_path: 'cert.pem'
