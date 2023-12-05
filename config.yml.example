@@ -4,6 +4,8 @@ aesKey: 'key for AES traffic encryption (not for websocket, but for proxied traf
 users:
   - username: SecureConnect
     password: SecureConnect
+    ip: 10.0.0.2 # 10.0.0.1 is reserved for SecureConnect server
 #passphrase: 'passphrase for HTTPS certificate'
 key_path: 'key.pem'
 cert_path: 'cert.pem'
+allow_localhost_connections: true # forward all local ports to 10.0.0.1

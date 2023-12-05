@@ -21,6 +21,12 @@ module.exports = async (data, client) => {
         );
     }
     client.username = data.username;
+    client.tunnels = data.tunnels;
+    if (user.ip && client.tunnels) {
+        for (const port in client.tunnels) {
+            tunnels[`${user.ip}:${port}`] = client;
+        }
+    }
     client.send(
         packServiceData(
             false,
