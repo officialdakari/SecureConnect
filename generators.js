@@ -3,16 +3,21 @@ function randomInt(max, min) {
     return Math.floor(Math.random() * (max - min)) + min;
 }
 
-function generateID() {
+function generateID(length) {
     const alphabet = 'qwertyuiopasdfghjklzxcvbnm';
     var password = '';
-    for (let i = 0; i < 32; i++) {
+    for (let i = 0; i < length ?? 32; i++) {
         password += alphabet[randomInt(alphabet.length)];
     }
     return password;
 }
 
+function generateGarbage() {
+    return generateID(randomInt(8, 512));
+}
+
 module.exports = {
     generateID,
+    generateGarbage,
     randomInt
 };
