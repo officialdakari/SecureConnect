@@ -13,7 +13,7 @@ function generateID(length) {
 }
 
 function generateGarbage() {
-    return generateID(randomInt(8, 512));
+    return generateID(randomInt(8, 128));
 }
 
 module.exports = {
