@@ -192,7 +192,23 @@ module.exports = async (data, client) => {
     });
 
     socket.id = data.socketId ?? generateID();
-    socket.on('close', async () => {
+    socket.on('end', async () => {
+        client.send(
+            packServiceData(
+                false,
+                [
+                    {
+                        handler: 'Connection',
+                        type: 'Closed',
+                        socketId: socket.id,
+                        message: `Connection to ${data.host}:${data.port} closed`
+                    }
+                ]
+            )
+        );
+        client.sockets = client.sockets.filter(s => s != socket);
+    });
+    socket.on('error', async () => {
         client.send(
             packServiceData(
                 false,
