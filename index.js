@@ -32,9 +32,11 @@ const wss = new ws.WebSocketServer({
 });
 
 wss.on('connection', async (client) => {
-    client.on('message', async (message, isBinary) => {
-        if (!isBinary) {
-            const msg = YAML.parse(message.toString('utf-8'));
+    var packets = [];
+    setInterval(async () => {
+        packets = packets.sort((a, b) => a.timestamp - b.timestamp);
+        for (const msg of packets) {
+            packets.shift();
             try {
                 await require(`./handlers/${msg._}`)(msg, client);
             } catch (error) {
@@ -53,12 +55,18 @@ wss.on('connection', async (client) => {
                 console.error(error);
             }
         }
+    }, 1);
+    client.on('message', async (message, isBinary) => {
+        if (!isBinary) {
+            const msg = YAML.parse(message.toString('utf-8'));
+            packets.push(msg);
+        }
     });
 });
 
 server.on('request', (req, res) => {
     req.on('end', () => {
-        res.writeHead(200, {'Content-Type': 'text/plain'});
+        res.writeHead(200, { 'Content-Type': 'text/plain' });
         res.end('Hello World');
     });
 });

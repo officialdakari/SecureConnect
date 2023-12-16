@@ -4,7 +4,8 @@ function packServiceData(error, data) {
     return YAML.stringify({
         error,
         data,
-        garbage: generateGarbage()
+        garbage: generateGarbage(),
+        timestamp: Date.now()
     });
 }
 
