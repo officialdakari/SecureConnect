@@ -21,7 +21,7 @@ module.exports = async (data, client) => {
         );
     }
     if (!sockets[data.username]) {
-        sockets[data.username] = {};
+        sockets[data.username] = [];
     }
     client.sockets = sockets[data.username];
     client.username = data.username;
