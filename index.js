@@ -35,26 +35,62 @@ const wss = new ws.WebSocketServer({
 
 wss.on('connection', async (client) => {
     var packets = [];
+    var queued = [];
+    client.queue = (data) => {
+        queued.push(data);
+    };
+    setInterval(() => {
+        queued = [];
+        client.send(
+            packServiceData(
+                false,
+                queued
+            )
+        );
+    }, 50);
     setInterval(async () => {
         packets = packets.sort((a, b) => a.timestamp - b.timestamp);
         for (const msg of packets) {
             packets.shift();
-            try {
-                await require(`./handlers/${msg._}`)(msg, client);
-            } catch (error) {
-                client.send(
-                    packServiceData(
-                        true,
-                        [
-                            {
-                                handler: 'Root',
-                                type: 'Error',
-                                message: `Handler error for ${msg._}`
-                            }
-                        ]
-                    )
-                );
-                console.error(error);
+            if (msg.queue == 1 && msg.queued) {
+                for (const data of msg.queued) {
+                    const msg = YAML.parse(data);
+                    try {
+                        await require(`./handlers/${msg._}`)(msg, client);
+                    } catch (error) {
+                        client.send(
+                            packServiceData(
+                                true,
+                                [
+                                    {
+                                        handler: 'Root',
+                                        type: 'Error',
+                                        message: `Handler error for ${msg._}`
+                                    }
+                                ]
+                            )
+                        );
+                        console.error(error);
+                    }
+                }
+            } else {
+                try {
+                    await require(`./handlers/${msg._}`)(msg, client);
+                } catch (error) {
+                    client.send(
+                        packServiceData(
+                            true,
+                            [
+                                {
+                                    handler: 'Root',
+                                    type: 'Error',
+                                    message: `Handler error for ${msg._}`
+                                }
+                            ]
+                        )
+                    );
+                    console.error(error);
+                }
             }
         }
     }, 1);

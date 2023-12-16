@@ -3,21 +3,16 @@ var sockets = {};
 module.exports = async (data, client) => {
     const user = config.users.find(
         u =>
-            u.username == data.username && 
+            u.username == data.username &&
             u.password == data.password
     );
     if (!user) {
-        return client.send(
-            packServiceData(
-                true,
-                [
-                    {
-                        handler: 'Authorization',
-                        type: 'Failed',
-                        message: 'Invalid username or password'
-                    }
-                ]
-            )
+        return client.queue(
+            {
+                handler: 'Authorization',
+                type: 'Failed',
+                message: 'Invalid username or password'
+            }
         );
     }
     if (!sockets[data.username]) {
@@ -31,16 +26,11 @@ module.exports = async (data, client) => {
             tunnels[`${user.ip}:${port}`] = client;
         }
     }
-    client.send(
-        packServiceData(
-            false,
-            [
-                {
-                    handler: 'Authorization',
-                    type: 'Success',
-                    message: 'Successfully authorized'
-                }
-            ]
-        )
+    client.queue(
+        {
+            handler: 'Authorization',
+            type: 'Success',
+            message: 'Successfully authorized'
+        }
     );
 };
