@@ -10,6 +10,8 @@ const { packServiceData } = require('./serializer');
 
 const config = YAML.parse(fs.readFileSync('config.yml', 'utf-8'));
 
+globalThis.config = config;
+
 var server;
 
 if (config.key_path && config.cert_path) {
