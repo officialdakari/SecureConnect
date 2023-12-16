@@ -52,23 +52,18 @@ wss.on('connection', async (client) => {
         packets = packets.sort((a, b) => a.timestamp - b.timestamp);
         for (const msg of packets) {
             packets.shift();
-            if (msg.queue == 1 && msg.queued) {
+            if (msg.queue == 1) {
                 for (const data of msg.queued) {
                     const msg = YAML.parse(data);
                     try {
                         await require(`./handlers/${msg._}`)(msg, client);
                     } catch (error) {
-                        client.send(
-                            packServiceData(
-                                true,
-                                [
-                                    {
-                                        handler: 'Root',
-                                        type: 'Error',
-                                        message: `Handler error for ${msg._}`
-                                    }
-                                ]
-                            )
+                        client.queue(
+                            {
+                                handler: 'Root',
+                                type: 'Error',
+                                message: `Handler error for ${msg._}`
+                            }
                         );
                         console.error(error);
                     }
@@ -77,17 +72,12 @@ wss.on('connection', async (client) => {
                 try {
                     await require(`./handlers/${msg._}`)(msg, client);
                 } catch (error) {
-                    client.send(
-                        packServiceData(
-                            true,
-                            [
-                                {
-                                    handler: 'Root',
-                                    type: 'Error',
-                                    message: `Handler error for ${msg._}`
-                                }
-                            ]
-                        )
+                    client.queue(
+                        {
+                            handler: 'Root',
+                            type: 'Error',
+                            message: `Handler error for ${msg._}`
+                        }
                     );
                     console.error(error);
                 }
