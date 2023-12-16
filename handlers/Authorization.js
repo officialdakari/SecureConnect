@@ -1,5 +1,5 @@
 const { packServiceData } = require("../serializer");
-
+var sockets = {};
 module.exports = async (data, client) => {
     const user = config.users.find(
         u =>
@@ -20,6 +20,10 @@ module.exports = async (data, client) => {
             )
         );
     }
+    if (!sockets[data.username]) {
+        sockets[data.username] = {};
+    }
+    client.sockets = sockets[data.username];
     client.username = data.username;
     client.tunnels = data.tunnels;
     if (user.ip && client.tunnels) {
