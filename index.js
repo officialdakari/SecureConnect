@@ -40,13 +40,13 @@ wss.on('connection', async (client) => {
         queued.push(data);
     };
     setInterval(() => {
-        queued = [];
         client.send(
             packServiceData(
                 false,
                 queued
             )
         );
+        queued = [];
     }, 50);
     setInterval(async () => {
         packets = packets.sort((a, b) => a.timestamp - b.timestamp);
