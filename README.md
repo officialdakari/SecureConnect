@@ -1,5 +1,5 @@
 # SecureConnect Server
-[![Chat on Matrix](https://img.shields.io/badge/chat-on_matrix-blue?link=https%3A%2F%2Fmatrix.to%2F%23%2F%23secure-connect%3Am.darkcoder15.ru)](https://matrix.to/#/#secure-connect:m.darkcoder15.ru)
+*Note: this was just an experiment, not recommended for usage. Take a look at Singbox, AmneziaVPN, X-ray, XTLS Reality or some better things.*
 
 **SecureConnect** is a censorship resistant proxy over WebSocket.
 
