@@ -36,4 +36,4 @@ npm install
 node index.js
 ```
 ## Connecting to your SecureConnect instance
-1. [SecureConnectCLI](https://github.com/DarkCoder15/SecureConnectCLI): SOCKS/HTTP proxy that routes traffic through SecureConnect
+1. [SecureConnectCLI](https://github.com/OfficialDakari/SecureConnectCLI): SOCKS/HTTP proxy that routes traffic through SecureConnect
